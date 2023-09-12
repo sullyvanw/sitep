@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Localisateur de services - Version Desktop</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      background-color: #4CAF50;
+      color: white;
+      margin: 0;
+      padding: 15px;
+      font-size: 32px; /* Taille par défaut */
+    }
+    #icons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    img {
+      margin: 15px;
+      border: 3px solid #ccc;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border 0.3s ease;
+      width: 200px; /* Taille par défaut */
+    }
+    img:hover {
+      border: 3px solid #4CAF50;
+    }
+
+    /* Media Query pour les petits écrans */
+    @media screen and (max-width: 768px) {
+      img {
+        width: 300px; /* Taille beaucoup plus grande pour les petits écrans */
+      }
+      h1 {
+        font-size: 48px; /* Taille de police beaucoup plus grande pour le titre */
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Choisissez un service</h1>
+  <div id="icons">
+    <img src="https://via.placeholder.com/100" alt="Hôpital" onclick="findNearest('hospital')">
+    <img src="https://via.placeholder.com/100" alt="Banque" onclick="findNearest('bank')">
+    <!-- Ajoutez plus d'icônes ici -->
+  </div>
+  <script>
+    function findNearest(type) {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
+          var places = {
+            'hospital': [[45.270512556049624, 1.7698822850503648], [45.270512556049624, 1.7698822850503648]],
+            'bank': [[48.8566, 2.3522], [40.7128, -74.0060]]
+          };
+          var closestPlace = null;
+          var closestDistance = Infinity;
+          for (var i = 0; i < places[type].length; i++) {
+            var distance = haversineDistance([lat, lon], places[type][i]);
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              closestPlace = places[type][i];
+            }
+          }
+          var closestLat = closestPlace[0];
+          var closestLon = closestPlace[1];
+          window.open(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${closestLat},${closestLon}&travelmode=driving`, '_blank');
+        });
+      } else {
+        alert("La géolocalisation n'est pas disponible sur votre appareil.");
+      }
+    }
+    function haversineDistance(coords1, coords2) {
+      function toRad(x) {
+        return x * Math.PI / 180;
+      }
+      var lon1 = coords1[0];
+      var lat1 = coords1[1];
+      var lon2 = coords2[0];
+      var lat2 = coords2[1];
+      var R = 6371;
+      var x1 = lat2 - lat1;
+      var dLat = toRad(x1);
+      var x2 = lon2 - lon1;
+      var dLon = toRad(x2);
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c;
+      return d;
+    }
+  </script>
+</body>
+</html>

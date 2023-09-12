@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Localisateur de services - Version Mobile</title>
+  <style>
+    /* Votre CSS pour la version mobile ici */
+    h1 {
+      font-size: 900px; /* Taille de police beaucoup plus grande pour le titre */
+    }
+    img {
+      width: 700px; /* Taille beaucoup plus grande pour les petits écrans */
+    }
+     body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      background-color: #4CAF50;
+      color: white;
+      margin: 0;
+      padding: 30px;
+      font-size: 70px; /* Taille par défaut */
+    }
+    #icons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    img {
+      margin: 15px;
+      border: 3px solid #ccc;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border 0.3s ease;
+      width: 250px; /* Taille par défaut */
+    }
+    img:hover {
+      border: 3px solid #4CAF50;
+    }
+
+    /* Media Query pour les petits écrans */
+    @media screen and (max-width: 768px) {
+      img {
+        width: 300px; /* Taille beaucoup plus grande pour les petits écrans */
+      }
+      h1 {
+        font-size: 48px; /* Taille de police beaucoup plus grande pour le titre */
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Choisissez un service</h1>
+  <div id="icons">
+    <img src="hopital.png" alt="Hôpital" onclick="findNearest('hospital')">
+    <img src="bank.png" alt="Banque" onclick="findNearest('bank')">
+  <img src="train.png" alt="Gare ferroviaire" onclick="findNearest('train_station')">
+  <img src="medicine_1-256.png" alt="Pharmacie" onclick="findNearest('pharmacy')">
+  <img src="magasin.png" alt="Supermarché" onclick="findNearest('supermarket')">
+  <img src="essence.png" alt="Station-service" onclick="findNearest('gas_station')">
+  <img src="macdo.png" alt="Restaurant" onclick="findNearest('restaurant')">
+  <img src="laposte.png" alt="Poste" onclick="findNearest('post_office')">
+  <img src="police.png" alt="Police" onclick="findNearest('police_station')">
+  <img src="bibliothèque.png" alt="Bibliothèque" onclick="findNearest('library')">
+</div>
+<!-- Votre code JavaScript existant -->
+
+    <!-- Ajoutez plus d'icônes ici -->
+  </div>
+  <script>
+    function findNearest(type) {
+      var places = {
+        'hospital': [45.270512556049624, 1.7698822850503648],
+        'bank': [48.8566, 2.3522],
+        'train_station': [45.25888506490451, 1.7564491395368846], // Ajoutez les coordonnées GPS de la gare la plus proche
+        'pharmacy': [48.8566, 2.3522], // Ajoutez les coordonnées GPS de la pharmacie la plus proche
+        'supermarket': [48.8566, 2.3522], // Ajoutez les coordonnées GPS du supermarché le plus proche
+        'gas_station': [48.8566, 2.3522], // Ajoutez les coordonnées GPS de la station-service la plus proche
+        'restaurant': [48.8566, 2.3522], // Ajoutez les coordonnées GPS du restaurant le plus proche
+        'post_office': [48.8566, 2.3522], // Ajoutez les coordonnées GPS du bureau de poste le plus proche
+        'police_station': [48.8566, 2.3522], // Ajoutez les coordonnées GPS du poste de police le plus proche
+        'library': [48.8566, 2.3522], // Ajoutez les coordonnées GPS de la bibliothèque la plus proche
+          };
+
+      // Détection de l'appareil
+      var isAppleDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+      var lat = places[type][0];
+      var lon = places[type][1];
+
+      if (typeof lat !== 'undefined' && typeof lon !== 'undefined') {
+        if (isAppleDevice) {
+          // Ouvre dans Apple Maps pour les appareils Apple
+          window.open(`http://maps.apple.com/?ll=${lat},${lon}`, '_blank');
+        } else {
+          // Ouvre dans Google Maps pour Android et PC
+          window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`, '_blank');
+        }
+      } else {
+        alert("Les coordonnées ne sont pas définies pour ce type de lieu.");
+      }
+    }
+  </script>
+</body>
+</html>
